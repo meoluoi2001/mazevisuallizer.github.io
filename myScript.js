@@ -445,11 +445,9 @@ class Maze {
     this.density = density;
     // Initialize the maze
     //  Create an array size = this.size ** 2
-    this.mazeArray = [];
+
     // Initialize all block as 0
-    for (let i = 0; i < this.size * this.size; i++) {
-      this.mazeArray.push(0);
-      }
+    this.mazeArray = new Array(this.size * this.size).fill(0);
     }
   // This funtion will generate a random maze size X by X
   generateRandomMaze() {
@@ -472,14 +470,11 @@ class Maze {
         var current = truePath[truePath.length - 1];
         var v = maze.getNeighborIndex(current);
 
-        // We will sort the neighbors based on their distance from goal
-        v.sort((a, b) => distance(a, goal) - distance(b, goal));
-
         // Then we will add all node with higher index than average to the neighbor
         //   list, thus making the path more likely to head toward the goal
 
         // v.reduce((a,b) => a + b)) return the sum of array v
-        v.concat(v.filter(x => x > v.reduce((a,b) => a + b) / v.length));
+        v = v.concat(v.filter(x => x > v.reduce((a,b) => a + b) / v.length));
 
         // I.E if node 10 has neighbor list of (0, 9, 11, 20), then 11 and 20 will be
         //  duplicated since they are closer to goal which is bottom right edge in this example
@@ -511,25 +506,30 @@ class Maze {
         }
       }
 
-      // Since the path we created will be very messy, we will need to
-      //  create a new path from the messed path
-      // We will fill the maze with blocked node, leaving only the truePath
-      //  as passable maze
-      for (let x = 0; x < this.size; x++) {
-        for (let y = 0; y < this.size; y++) {
-          if (Math.random() < this.density) {
-            var index = this.maze(x, y);
-            if (truePath.indexOf(index) >= 0) {
-              continue;
+
+      if (this.density >= 0.3) {
+        // Since the path we created will be very messy,
+        //  and is very noticable at high density
+        //  we will need to
+        //  create a new path from the messed path
+        // We will fill the maze with blocked node, leaving only the truePath
+        //  as passable maze
+        for (let x = 0; x < this.size; x++) {
+          for (let y = 0; y < this.size; y++) {
+            if (Math.random() < this.density) {
+              var index = this.maze(x, y);
+              if (truePath.indexOf(index) >= 0) {
+                continue;
+              }
+            this.mazeArray[index] = 1;
             }
-          this.mazeArray[index] = 1;
           }
         }
+        aStarW();
+        this.mazeArray = new Array(this.size * this.size).fill(0); // We will reset the array
+        truePath = curPath.slice();         // Then coppy the path from the aStar to true path
+        curPath = []; // Reset the path
       }
-      aStarW();
-      this.mazeArray.forEach(x => x = 0); // We will reset the array
-      truePath = curPath.slice();         // Then coppy the path from the aStar to true path
-      curPath = []; // Reset the path
     }
 
     // Then we generate the maze again
