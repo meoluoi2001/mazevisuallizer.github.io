@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+
+<body>
+
+  <h1>aMazeing</h1>
+
+  <label for="mazeSize">Enter maze's size:</label>
+  <input type="text" id="mazeSize" name="mazeSize"><br><br>
+  <label for="mazeDensity">Enter maze's density:</label>
+  <input type="text" id="mazeDensity" name="mazeDensity">
+  <label for="random">Completly random the maze, may not be a solution</label>
+  <input type="checkbox" name="random" id = "random" value="">
+  <br><br>
+  <label for="algorithms">Choose a algorithm:</label>
+  <select name="algorithm" id="algorithm">
+    <option value="dj">Dijkstra's Algorithm</option>
+    <option value="as">A Star Algorithm</option>
+    <option value="custom">Custom Algorithm</option>
+  </select>
+  <label for="mazeDensity">Time between while loop:</label>
+  <input type="text" id="interval" name="interval" value="1"><br><br>
+
+  <button type="button" name="randomMaze" onclick="randomMaze()">Random Maze</button>
+  <button type="button" name="solveMaze" onclick="solveMaze()">Solve Maze</button>
+  <button type="button" name="testTime" onclick = "testing()">Benchmaking</button>
+
+  <p id = "testResult"></p>
+
+  <canvas id="myCanvas" width="500" height="500" style="border:1px solid #d3d3d3;">
+    Your browser does not support the HTML canvas tag.</canvas>
+  <script src="myScript.js" charset="utf-8"></script>
+</body>
+
+</html>
